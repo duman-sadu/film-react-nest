@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class FilmSchedule {
   @Prop({ required: true })
-  id: string; // UUID, не ObjectId
+  id: string; 
 
   @Prop({ required: true })
   daytime: string;

@@ -11,10 +11,10 @@ class SeatDto {
 
 export class OrderDto {
   @IsString()
-  filmId: string; // это _id из MongoDB
+  filmId: string;
 
   @IsString()
-  scheduleId: string; // UUID строки
+  scheduleId: string;
 
   @IsArray()
   @ArrayNotEmpty()

@@ -15,14 +15,12 @@ export class OrderService {
   ) {}
 
   async createOrder(order: OrderDto) {
-    // 1. Email + phone
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(order.email))
       throw new BadRequestException('Invalid email');
 
     if (!/^\+7\d{10}$/.test(order.phone))
       throw new BadRequestException('Invalid phone');
 
-    // 2. Film search (исправлено)
     if (!Types.ObjectId.isValid(order.filmId)) {
       throw new NotFoundException('Invalid filmId');
     }
@@ -30,11 +28,9 @@ export class OrderService {
     const film = await this.filmModel.findById(order.filmId).exec();
     if (!film) throw new NotFoundException('Film not found');
 
-    // 3. Schedule search — строковые UUID
     const schedule = film.schedule.find((s) => s.id === order.scheduleId);
     if (!schedule) throw new NotFoundException('Schedule not found');
 
-    // 4. Check seats
     schedule.taken = schedule.taken ?? [];
 
     for (const seat of order.seats) {
@@ -47,7 +43,6 @@ export class OrderService {
       schedule.taken.push(key);
     }
 
-    // 5. Create tickets
     const tickets = order.seats.map((seat) => ({
       id: new Types.ObjectId().toString(),
       film: order.filmId,
@@ -58,7 +53,6 @@ export class OrderService {
       price: schedule.price ?? 0,
     }));
 
-    // 6. Save
     await film.save();
 
     return {

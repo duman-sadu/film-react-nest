@@ -4,10 +4,10 @@ import { Document } from 'mongoose';
 @Schema()
 export class Schedule extends Document {
   @Prop({ required: true })
-  id: string; // UUID
+  id: string;
 
   @Prop({ required: true })
-  filmId: string; // UUID фильма
+  filmId: string;
 
   @Prop()
   daytime: string;
