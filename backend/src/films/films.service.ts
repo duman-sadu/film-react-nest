@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IFilmsRepository, IFilmsRepositoryToken } from '../repository/films.repository';
+import {
+  IFilmsRepository,
+  IFilmsRepositoryToken,
+} from '../repository/films.repository';
 
 @Injectable()
 export class FilmsService {
   constructor(
     @Inject(IFilmsRepositoryToken)
-    private readonly repository: IFilmsRepository
+    private readonly repository: IFilmsRepository,
   ) {}
 
   getAll() {
