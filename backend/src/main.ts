@@ -1,11 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { createLogger } from './logger/logger.factory';
+import 'dotenv/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useLogger(createLogger());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
 
   app.setGlobalPrefix('api/afisha');
 
@@ -15,6 +25,5 @@ async function bootstrap() {
   });
 
   await app.listen(3000);
-  console.log('Backend running on http://localhost:3000');
 }
 bootstrap();
