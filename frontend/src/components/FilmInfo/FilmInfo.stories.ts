@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FilmInfo } from './FilmInfo';
 
-const meta = {
+const meta: Meta<typeof FilmInfo> = {
   title: 'UI/FilmInfo',
   component: FilmInfo,
   parameters: {
