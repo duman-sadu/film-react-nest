@@ -16,8 +16,8 @@ import { AppController } from './app.controller';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      autoLoadEntities: true,       // автоматически загружает все entity
-      synchronize: true,            // только для dev! на prod лучше миграции
+      autoLoadEntities: true, // автоматически загружает все entity
+      synchronize: true, // только для dev! на prod лучше миграции
     }),
 
     // Статика для контента
