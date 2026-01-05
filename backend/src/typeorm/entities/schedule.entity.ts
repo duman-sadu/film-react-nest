@@ -16,11 +16,11 @@ export class Schedule {
   @ManyToOne(() => Film, (film) => film.schedule, { onDelete: 'CASCADE' })
   film: Film;
 
-  @Column({ type: 'text', default: '' })
-  daytime: string;
+  @Column({ type: 'timestamptz' })
+  daytime: Date;
 
-  @Column({ type: 'text', default: '' })
-  hall: string;
+  @Column({ type: 'integer', default: 0 })
+  hall: number;
 
   @Column({ type: 'integer', default: 0 })
   rows: number;
@@ -31,8 +31,10 @@ export class Schedule {
   @Column({ type: 'integer', default: 0 })
   price: number;
 
-  // Записать занятые места как массив текстов: ['1:2', '2:4']
-  @Column('text', { array: true, default: [] })
+  @Column('text', {
+    array: true,
+    default: () => 'ARRAY[]::text[]',
+  })
   taken: string[];
 
   @CreateDateColumn({ name: 'created_at' })
