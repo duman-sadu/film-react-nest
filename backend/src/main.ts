@@ -11,19 +11,22 @@ async function bootstrap() {
 
   app.useLogger(createLogger());
 
+  // ✅ Добавляем transform: true
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true, // <- Важно для корректного преобразования DTO
+      forbidNonWhitelisted: true,
     }),
   );
 
   app.setGlobalPrefix('api/afisha');
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: true,
     credentials: true,
   });
 
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
 }
 bootstrap();

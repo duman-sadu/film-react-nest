@@ -40,6 +40,8 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
       TYPEORM_SYNCHRONIZE: ${TYPEORM_SYNCHRONIZE}
+    ports:
+      - "3000:3000"
     depends_on:
       - database
     networks:
