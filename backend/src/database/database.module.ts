@@ -10,15 +10,15 @@ export class DatabaseModule {
     return {
       module: DatabaseModule,
       imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
+        ConfigModule.forRoot({ isGlobal: true }), // глобальный доступ к process.env
         TypeOrmModule.forRoot({
           type: 'postgres',
           host: process.env.DATABASE_HOST,
-          port: Number(process.env.DATABASE_PORT),
+          port: Number(process.env.DATABASE_PORT) || 5432,
           username: process.env.DATABASE_USERNAME,
           password: process.env.DATABASE_PASSWORD,
           database: process.env.DATABASE_NAME,
-          entities: [Film, Schedule],
+          entities: [Film, Schedule], // можно добавлять новые entity сюда
           autoLoadEntities: true,
           synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
         }),
