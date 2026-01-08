@@ -24,7 +24,7 @@ class SeatDto {
 
 export class OrderDto {
   @IsString()
-  filmId: string;
+  film_id: string;
 
   @IsString()
   scheduleId: string;
