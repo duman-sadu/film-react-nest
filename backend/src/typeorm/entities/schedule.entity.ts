@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Film } from './film.entity';
 
@@ -13,29 +14,27 @@ export class Schedule {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Film, (film) => film.schedule, { onDelete: 'CASCADE' })
-  film: Film;
-
   @Column({ type: 'timestamptz' })
   daytime: Date;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int' })
   hall: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int' })
   rows: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int' })
   seats: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int' })
   price: number;
 
-  @Column('text', {
-    array: true,
-    default: () => 'ARRAY[]::text[]',
-  })
+  @Column({ type: 'text', array: true, default: () => "ARRAY[]::text[]" })
   taken: string[];
+
+  @ManyToOne(() => Film)
+  @JoinColumn({ name: 'film_id' })
+  film: Film;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

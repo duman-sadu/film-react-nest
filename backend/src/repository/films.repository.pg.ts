@@ -15,7 +15,7 @@ export class FilmsPgRepository implements IFilmsRepository {
   ) {}
 
   async getAll(): Promise<any[]> {
-    const films = await this.filmRepo.find();
+    const films = await this.filmRepo.find({ relations: ['schedule'] });
 
     return films.map((f) => ({
       id: f.id,
@@ -23,13 +23,22 @@ export class FilmsPgRepository implements IFilmsRepository {
       description: f.description ?? '',
       image: f.image ?? '',
       cover: f.cover ?? '',
-      schedule: [],
+      schedule: (f.schedule ?? []).map((s) => ({
+        id: s.id,
+        film: f.id,
+        daytime: s.daytime,
+        hall: s.hall,
+        rows: s.rows,
+        seats: s.seats,
+        price: s.price,
+        taken: s.taken,
+      })),
     }));
   }
 
-  async getSchedule(filmId: string): Promise<any[]> {
+  async getSchedule(film_id: string): Promise<any[]> {
     const film = await this.filmRepo.findOne({
-      where: { id: filmId },
+      where: { id: film_id },
       relations: ['schedule'],
     });
     if (!film) return [];
@@ -37,23 +46,23 @@ export class FilmsPgRepository implements IFilmsRepository {
     return (film.schedule ?? []).map((s) => ({
       id: s.id,
       film: film.id,
-      daytime: s.daytime ?? '',
-      hall: s.hall ?? '',
-      rows: s.rows ?? 0,
-      seats: s.seats ?? 0,
-      price: s.price ?? 0,
+      daytime: s.daytime,
+      hall: s.hall,
+      rows: s.rows,
+      seats: s.seats,
+      price: s.price,
       taken: s.taken ?? [],
     }));
   }
 
   async findById(id: string): Promise<any | null> {
-    return this.filmRepo.findOne({ where: { id } });
+    return this.filmRepo.findOne({ where: { id }, relations: ['schedule'] });
   }
 
   async update(id: string, data: any): Promise<any> {
     const film = await this.filmRepo.findOne({ where: { id } });
     if (!film) return null;
-    const merged = Object.assign(film, data);
-    return this.filmRepo.save(merged);
+    Object.assign(film, data);
+    return this.filmRepo.save(film);
   }
 }

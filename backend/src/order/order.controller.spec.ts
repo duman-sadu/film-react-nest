@@ -8,7 +8,7 @@ describe('OrderController', () => {
   let service: jest.Mocked<OrderService>;
 
   const orderDto: OrderDto = {
-    filmId: 'film-id',
+    film_id: 'film-id',
     scheduleId: 'schedule-id',
     seats: [
       { row: 1, seat: 1 },

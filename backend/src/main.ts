@@ -20,7 +20,7 @@ async function bootstrap() {
     }),
   );
 
-  app.setGlobalPrefix('api/afisha');
+  app.setGlobalPrefix('api');
 
   app.enableCors({
     origin: true,
