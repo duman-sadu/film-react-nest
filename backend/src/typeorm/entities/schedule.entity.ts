@@ -29,7 +29,7 @@ export class Schedule {
   @Column({ type: 'int' })
   price: number;
 
-  @Column({ type: 'text', array: true, default: () => "ARRAY[]::text[]" })
+  @Column({ type: 'text', array: true, default: () => 'ARRAY[]::text[]' })
   taken: string[];
 
   @ManyToOne(() => Film)
