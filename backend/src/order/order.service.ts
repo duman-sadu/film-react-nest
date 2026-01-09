@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Schedule } from '../typeorm/entities/schedule.entity';
-import { OrderDto, TicketDto } from './dto/order.dto';
+import { OrderDto } from './dto/order.dto';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -24,7 +24,11 @@ export class OrderService {
     if (!/^\+7\d{10}$/.test(order.phone))
       throw new BadRequestException('Invalid phone');
 
-    if (!order.tickets || !Array.isArray(order.tickets) || order.tickets.length === 0)
+    if (
+      !order.tickets ||
+      !Array.isArray(order.tickets) ||
+      order.tickets.length === 0
+    )
       throw new BadRequestException('Tickets must be a non-empty array');
 
     // Берём schedule по первой записи
