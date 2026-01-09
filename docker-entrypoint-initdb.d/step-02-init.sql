@@ -1,4 +1,4 @@
-\connect films
+\connect prac
 
 -- Включаем расширение для UUID
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

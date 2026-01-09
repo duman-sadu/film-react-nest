@@ -8,19 +8,33 @@ describe('OrderController', () => {
   let service: jest.Mocked<OrderService>;
 
   const orderDto: OrderDto = {
-    film_id: 'film-id',
-    scheduleId: 'schedule-id',
-    seats: [
-      { row: 1, seat: 1 },
-      { row: 1, seat: 2 },
-    ],
     email: 'test@example.com',
     phone: '+77001234567',
+    tickets: [
+      {
+        film: 'film-id',
+        session: 'schedule-id',
+        row: 1,
+        seat: 1,
+        price: 350,
+        day: '28 июня',
+        time: '10:00',
+      },
+      {
+        film: 'film-id',
+        session: 'schedule-id',
+        row: 1,
+        seat: 2,
+        price: 350,
+        day: '28 июня',
+        time: '10:00',
+      },
+    ],
   };
 
   const orderResult = {
     id: 'order-id',
-    total: 500,
+    total: 2,
   };
 
   beforeEach(async () => {

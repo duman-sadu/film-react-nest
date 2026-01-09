@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Schedule } from '../typeorm/entities/schedule.entity';
-import { OrderDto } from './dto/order.dto';
+import { OrderDto, TicketDto } from './dto/order.dto';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -17,46 +17,53 @@ export class OrderService {
   ) {}
 
   async createOrder(order: OrderDto) {
-    // email validation
+    // Валидация email и телефона (дублируется с DTO, но для безопасности)
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(order.email))
       throw new BadRequestException('Invalid email');
 
-    // phone validation
     if (!/^\+7\d{10}$/.test(order.phone))
       throw new BadRequestException('Invalid phone');
 
-    // load schedule with film
+    if (!order.tickets || !Array.isArray(order.tickets) || order.tickets.length === 0)
+      throw new BadRequestException('Tickets must be a non-empty array');
+
+    // Берём schedule по первой записи
+    const scheduleId = order.tickets[0].session;
     const schedule = await this.scheduleRepo.findOne({
-      where: { id: order.scheduleId },
+      where: { id: scheduleId },
       relations: ['film'],
     });
 
     if (!schedule) throw new NotFoundException('Schedule not found');
 
-    // ensure taken exists
     schedule.taken = schedule.taken ?? [];
 
-    // check seats
-    for (const seat of order.seats) {
-      const key = `${seat.row}:${seat.seat}`;
+    // Проверка занятости мест
+    for (const ticket of order.tickets) {
+      if (ticket.row == null || ticket.seat == null)
+        throw new BadRequestException('Ticket row and seat must be provided');
+
+      const key = `${ticket.row}:${ticket.seat}`;
       if (schedule.taken.includes(key)) {
         throw new BadRequestException(`Seat already taken: ${key}`);
       }
       schedule.taken.push(key);
     }
 
-    // save updated schedule
+    // Сохраняем обновлённый schedule
     await this.scheduleRepo.save(schedule);
 
-    // generate tickets
-    const tickets = order.seats.map((seat) => ({
+    // Генерируем билеты для ответа
+    const tickets = order.tickets.map((ticket) => ({
       id: randomUUID(),
-      film: schedule.film?.id ?? null,
+      film: schedule.film?.id ?? ticket.film ?? null,
       session: schedule.id,
       daytime: schedule.daytime,
-      row: seat.row,
-      seat: seat.seat,
+      row: ticket.row,
+      seat: ticket.seat,
       price: schedule.price ?? 0,
+      day: ticket.day,
+      time: ticket.time,
     }));
 
     return {
