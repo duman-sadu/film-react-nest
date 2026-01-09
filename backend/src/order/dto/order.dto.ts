@@ -10,7 +10,15 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class SeatDto {
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// Класс для одного билета
+export class TicketDto {
+  @IsString()
+  film: string;
+
+  @IsString()
+  session: string;
+
   @Type(() => Number)
   @IsInt()
   @Min(1)
@@ -20,20 +28,24 @@ class SeatDto {
   @IsInt()
   @Min(1)
   seat: number;
+
+  @IsInt()
+  price: number;
+
+  @IsString()
+  day: string;
+
+  @IsString()
+  time: string;
 }
 
+// Основной DTO заказа
 export class OrderDto {
-  @IsString()
-  film_id: string;
-
-  @IsString()
-  scheduleId: string;
-
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
-  @Type(() => SeatDto)
-  seats: SeatDto[];
+  @Type(() => TicketDto) // ← здесь используется TicketDto
+  tickets: TicketDto[];
 
   @IsEmail()
   email: string;

@@ -11,11 +11,10 @@ async function bootstrap() {
 
   app.useLogger(createLogger());
 
-  // ✅ Добавляем transform: true
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      transform: true, // <- Важно для корректного преобразования DTO
+      transform: true,
       forbidNonWhitelisted: true,
     }),
   );
