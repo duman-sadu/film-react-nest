@@ -32,5 +32,15 @@ MongoDB должна быть установлена и запущена.
 Для проверки отправьте тестовый запрос с помощью Postman или `curl`.
 
 
+## Деплой проекта
+
+- Frontend: http://94.131.80.199
+- Backend API: http://94.131.80.199/api
+- Swagger: http://94.131.80.199/docs
+
+## Домен 
+film-react-nest-dum.nomorepartiessbs.ru
+
+
 
 
